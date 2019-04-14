@@ -12,11 +12,11 @@ namespace Convey.Auth.Services
     {
         private readonly IDistributedCache _cache;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IOptions<JwtOptions> _jwtOptions;
+        private readonly JwtOptions _jwtOptions;
 
         public AccessTokenService(IDistributedCache cache,
                 IHttpContextAccessor httpContextAccessor,
-                IOptions<JwtOptions> jwtOptions)
+                JwtOptions jwtOptions)
         {
             _cache = cache;
             _httpContextAccessor = httpContextAccessor;
@@ -38,7 +38,7 @@ namespace Convey.Auth.Services
                     "deactivated", new DistributedCacheEntryOptions
                     {
                         AbsoluteExpirationRelativeToNow =
-                            TimeSpan.FromMinutes(_jwtOptions.Value.ExpiryMinutes)
+                            TimeSpan.FromMinutes(_jwtOptions.ExpiryMinutes)
                     });
         }
 
