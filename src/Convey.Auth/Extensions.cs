@@ -23,10 +23,10 @@ namespace Convey.Auth
         }
         
         public static IConveyBuilder AddJwt(this IConveyBuilder builder, Func<IJwtOptionsBuilder, IJwtOptionsBuilder> buildOptions,
-            Func<IRedisOptionsBuilder, IRedisOptionsBuilder> buildRedisOptions)
+            Func<IRedisOptionsBuilder, IRedisOptionsBuilder> buildRedisOptions = null)
         {
             var options = buildOptions(new JwtOptionsBuilder()).Build();
-            return builder.AddJwt(options, b => b.AddRedis(buildRedisOptions));
+            return buildRedisOptions is null ? builder.AddJwt(options) : builder.AddJwt(options, b => b.AddRedis(buildRedisOptions));
         }
 
         public static IConveyBuilder AddJwt(this IConveyBuilder builder, JwtOptions options, RedisOptions redisOptions = null)
