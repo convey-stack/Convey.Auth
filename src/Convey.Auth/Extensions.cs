@@ -15,24 +15,30 @@ namespace Convey.Auth
         private const string SectionName = "jwt";
         private const string RegistryName = "auth";
 
-        public static IConveyBuilder AddJwt(this IConveyBuilder builder, string sectionName = SectionName, string redisSectionName = "redis")
+        public static IConveyBuilder AddJwt(this IConveyBuilder builder, string sectionName = SectionName,
+            string redisSectionName = "redis")
         {
-            var options = builder.GetOptions<JwtOptions>(SectionName);
+            var options = builder.GetOptions<JwtOptions>(sectionName);
             var redisOptions = builder.GetOptions<RedisOptions>(redisSectionName);
             return builder.AddJwt(options, b => b.AddRedis(redisOptions));
         }
-        
-        public static IConveyBuilder AddJwt(this IConveyBuilder builder, Func<IJwtOptionsBuilder, IJwtOptionsBuilder> buildOptions,
+
+        public static IConveyBuilder AddJwt(this IConveyBuilder builder,
+            Func<IJwtOptionsBuilder, IJwtOptionsBuilder> buildOptions,
             Func<IRedisOptionsBuilder, IRedisOptionsBuilder> buildRedisOptions = null)
         {
             var options = buildOptions(new JwtOptionsBuilder()).Build();
-            return buildRedisOptions is null ? builder.AddJwt(options) : builder.AddJwt(options, b => b.AddRedis(buildRedisOptions));
+            return buildRedisOptions is null
+                ? builder.AddJwt(options)
+                : builder.AddJwt(options, b => b.AddRedis(buildRedisOptions));
         }
 
-        public static IConveyBuilder AddJwt(this IConveyBuilder builder, JwtOptions options, RedisOptions redisOptions = null)
+        public static IConveyBuilder AddJwt(this IConveyBuilder builder, JwtOptions options,
+            RedisOptions redisOptions = null)
             => builder.AddJwt(options, b => b.AddRedis(redisOptions ?? new RedisOptions()));
-        
-        private static IConveyBuilder AddJwt(this IConveyBuilder builder, JwtOptions options, Action<IConveyBuilder> registerRedis)
+
+        private static IConveyBuilder AddJwt(this IConveyBuilder builder, JwtOptions options,
+            Action<IConveyBuilder> registerRedis)
         {
             if (!builder.TryRegister(RegistryName))
             {
