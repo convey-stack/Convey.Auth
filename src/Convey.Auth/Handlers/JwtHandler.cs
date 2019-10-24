@@ -36,7 +36,8 @@ namespace Convey.Auth.Handlers
                 ValidIssuer = _options.Issuer,
                 ValidAudience = _options.ValidAudience,
                 ValidateAudience = _options.ValidateAudience,
-                ValidateLifetime = _options.ValidateLifetime
+                ValidateLifetime = _options.ValidateLifetime,
+                ClockSkew = TimeSpan.Zero
             };
         }
 
